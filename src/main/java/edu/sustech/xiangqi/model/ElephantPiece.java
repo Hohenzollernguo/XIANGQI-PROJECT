@@ -45,6 +45,5 @@ public class ElephantPiece extends AbstractPiece {
         }
 
        return true;
-
     }
 }
