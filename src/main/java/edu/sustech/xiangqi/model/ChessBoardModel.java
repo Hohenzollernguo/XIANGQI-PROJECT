@@ -62,6 +62,12 @@ public class ChessBoardModel {
             return false;
         }
 
+        AbstractPiece targetPiece = getPieceAt(newRow, newCol);
+        if (targetPiece != null) {
+            pieces.remove(targetPiece);
+        }
+
+
         piece.moveTo(newRow, newCol);
         return true;
     }
