@@ -32,7 +32,16 @@ public class ElephantPiece extends AbstractPiece {
             if (targetRow>4){
                 return false;
             }
-
+        }
+        int eyeRow=(targetRow+currentRow)/2;
+        int eyeCol=(targetCol+currentCol)/2;
+        if (model.getPieceAt(eyeRow,eyeCol)!=null){
+            return false;
+        }
+        if (model.getPieceAt(targetRow,targetCol)!=null){
+            if (model.getPieceAt(targetRow,targetCol).isRed()){
+                return false;
+            }
         }
 
        return true;
