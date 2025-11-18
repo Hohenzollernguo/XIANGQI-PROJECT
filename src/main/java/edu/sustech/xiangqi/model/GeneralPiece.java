@@ -26,9 +26,27 @@ public class GeneralPiece extends AbstractPiece {
             if (targetRow<7||targetCol<3||targetCol>5){
                 return false;
             }
+            for (int i = targetRow; i >=0 ; i--) {
+                if (model.getPieceAt(i,targetCol)!=null){
+                    if (model.getPieceAt(i,targetCol).getName().equals("将")){
+                        return false;
+                    }
+                }
+            }
+
+
+
+
         }else {if (targetRow>2||targetCol<3||targetCol>5){
             return false;
         }
+            for (int i = targetRow; i <=9 ; i++) {
+                if (model.getPieceAt(i,targetCol)!=null){
+                    if (model.getPieceAt(i,targetCol).getName().equals("帅")){
+                        return false;
+                    }
+                }
+            }
         }
         if (model.getPieceAt(targetRow,targetCol)!=null){
             if (model.getPieceAt(targetRow,targetCol).isRed()){

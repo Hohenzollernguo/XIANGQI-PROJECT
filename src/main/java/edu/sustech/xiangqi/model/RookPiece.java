@@ -16,6 +16,11 @@ public class RookPiece extends AbstractPiece{
 
         //车的移动规则：
         // 直线任意步；无障碍可行
+        if (colDiff!=0&&rowDiff!=0){
+            return false;
+        }
+
+
 
 
 
