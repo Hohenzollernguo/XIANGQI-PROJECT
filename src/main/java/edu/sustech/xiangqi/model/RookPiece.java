@@ -16,15 +16,44 @@ public class RookPiece extends AbstractPiece{
 
         //车的移动规则：
         // 直线任意步；无障碍可行
-        if (colDiff!=0&&rowDiff!=0){
+        if (colDiff!=0&&rowDiff!=0) {
             return false;
         }
+        if (colDiff==0){
+            if (targetRow>getRow()){
+                for (int i = getRow()+1; i <targetRow ; i++) {
+                    if (model.getPieceAt(i,getCol())!=null){
+                        return false;
+                    }
+                }
+            }else {
+                for (int i = getRow()-1; i >targetRow ; i--) {
+                    if (model.getPieceAt(i,getCol())!=null){
+                        return false;
+                    }
+                }
 
-
-
-
-
-
+            }
+        }else {
+            if (targetCol>getCol()){
+                for (int i = getCol()+1; i <targetCol ; i++) {
+                    if (model.getPieceAt(getRow(),i)!=null){
+                        return false;
+                    }
+                    }
+                }else {
+                for (int i = getCol()-1; i >targetCol ; i--) {
+                    if (model.getPieceAt(getRow(),i)!=null){
+                        return false;
+                    }
+                }
+            }
+        }
+        if (model.getPieceAt(targetRow,targetCol)!=null){
+            if (model.getPieceAt(targetRow,targetCol).isRed()){
+                return false;
+            }
+        }
         return true;
     }
 }

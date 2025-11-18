@@ -33,10 +33,6 @@ public class GeneralPiece extends AbstractPiece {
                     }
                 }
             }
-
-
-
-
         }else {if (targetRow>2||targetCol<3||targetCol>5){
             return false;
         }
@@ -53,13 +49,6 @@ public class GeneralPiece extends AbstractPiece {
                 return false;
             }
         }
-
-
-
-
-
-
-
         return true;
     }
 }
