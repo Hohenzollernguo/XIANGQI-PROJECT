@@ -11,7 +11,11 @@ public class RookPiece extends AbstractPiece{
         if (currentRow == targetRow && currentCol == targetCol) {
             return false;
         }
+        int rowDiff = targetRow - currentRow;
+        int colDiff = targetCol - currentCol;
 
+        //车的移动规则：
+        // 直线任意步；无障碍可行
 
 
 
