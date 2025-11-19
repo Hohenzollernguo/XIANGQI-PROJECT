@@ -1,9 +1,5 @@
 package edu.sustech.xiangqi.model;
 
-import edu.sustech.xiangqi.XiangqiApplication;
-import edu.sustech.xiangqi.ui.Components.ShowingWhoseTurn;
-
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
