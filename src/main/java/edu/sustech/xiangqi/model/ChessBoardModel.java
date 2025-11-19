@@ -1,9 +1,26 @@
 package edu.sustech.xiangqi.model;
 
+import edu.sustech.xiangqi.XiangqiApplication;
+import edu.sustech.xiangqi.ui.Components.ShowingWhoseTurn;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+
+
 public class ChessBoardModel {
+
+
+
+    boolean blacksidetomove=false;
+
+    public boolean isBlacksidetomove() {
+        return blacksidetomove;
+    }
+
     // 储存棋盘上所有的棋子，要实现吃子的话，直接通过pieces.remove(被吃掉的棋子)删除就可以
     private final List<AbstractPiece> pieces;
     private static final int ROWS = 10;
@@ -73,6 +90,17 @@ public class ChessBoardModel {
             return false;
         }
 
+
+        /**
+         * 检验回合是否正确
+         */
+       if (piece.isRed()&&isBlacksidetomove()||(!piece.isRed()&&(!isBlacksidetomove()))){
+          return false;
+       }
+
+
+
+
         AbstractPiece targetPiece = getPieceAt(newRow, newCol);
         if (targetPiece != null) {
             pieces.remove(targetPiece);
@@ -80,6 +108,14 @@ public class ChessBoardModel {
 
 
         piece.moveTo(newRow, newCol);
+
+
+        /**
+         * 监测下一步该哪边移动
+         */
+        blacksidetomove=!isBlacksidetomove();
+
+
         return true;
     }
 

@@ -2,6 +2,7 @@ package edu.sustech.xiangqi;
 import edu.sustech.xiangqi.model.ChessBoardModel;
 import edu.sustech.xiangqi.ui.ChessBoardPanel;
 import edu.sustech.xiangqi.ui.Components.RestartButton;
+import edu.sustech.xiangqi.ui.Components.ShowingWhoseTurn;
 
 import javax.swing.*;
 
@@ -22,8 +23,18 @@ public class XiangqiApplication {
             frame.pack();
             frame.setLocationRelativeTo(null);
 
-            RestartButton.RestartGame(frame,model,boardPanel);
+            /**
+             * 设置组件
+             */
+             ShowingWhoseTurn showingWhoseTurn=new ShowingWhoseTurn();
 
+
+
+
+
+
+            RestartButton.RestartGame(frame,model,boardPanel);
+            showingWhoseTurn.setIndicationButton(model,frame);
 
             frame.setVisible(true);
         });
