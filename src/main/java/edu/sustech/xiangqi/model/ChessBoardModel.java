@@ -14,7 +14,14 @@ public class ChessBoardModel {
         initializePieces();
     }
 
-    private void initializePieces() {
+    public void initializePieces() {
+
+
+        pieces.clear();
+
+
+
+
         // 黑方棋子
         pieces.add(new GeneralPiece("將", 0, 4, false));
         pieces.add(new SoldierPiece("卒", 3, 0, false));
