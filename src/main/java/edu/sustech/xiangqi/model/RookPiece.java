@@ -6,6 +6,9 @@ public class RookPiece extends AbstractPiece {
     }
 
     public boolean canMoveTo(int targetRow, int targetCol, ChessBoardModel model) {
+        if (!super.canMoveTo(targetRow,targetCol,model)){
+            return false;
+        }
         int currentRow = getRow();
         int currentCol = getCol();
         if (currentRow == targetRow && currentCol == targetCol) {
@@ -13,7 +16,6 @@ public class RookPiece extends AbstractPiece {
         }
         int rowDiff = targetRow - currentRow;
         int colDiff = targetCol - currentCol;
-
         //车的移动规则：
         // 直线任意步；无障碍可行
         if (colDiff != 0 && rowDiff != 0) {

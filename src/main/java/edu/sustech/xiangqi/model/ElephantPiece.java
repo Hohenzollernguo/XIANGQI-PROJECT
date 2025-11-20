@@ -10,6 +10,9 @@ public class ElephantPiece extends AbstractPiece {
 
     @Override
     public boolean canMoveTo(int targetRow, int targetCol, ChessBoardModel model) {
+        if (!super.canMoveTo(targetRow,targetCol,model)){
+            return false;
+        }
         int currentRow=getRow();
         int currentCol=getCol();
         if (currentRow == targetRow && currentCol == targetCol) {

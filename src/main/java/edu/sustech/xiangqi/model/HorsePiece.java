@@ -7,6 +7,9 @@ public class HorsePiece extends AbstractPiece{
 
     @Override
     public boolean canMoveTo(int targetRow, int targetCol, ChessBoardModel model) {
+        if (!super.canMoveTo(targetRow,targetCol,model)){
+            return false;
+        }
         int currentRow = getRow();
         int currentCol = getCol();
         int rowDiff = Math.abs(targetRow- currentRow) ;
