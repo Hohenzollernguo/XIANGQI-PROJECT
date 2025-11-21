@@ -3,10 +3,15 @@ package edu.sustech.xiangqi.ui;
 import edu.sustech.xiangqi.model.ChessBoardModel;
 import edu.sustech.xiangqi.model.AbstractPiece;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
+import java.io.File;
+import java.io.IOException;
 
 public class ChessBoardPanel extends JPanel {
     private final ChessBoardModel model;
@@ -31,8 +36,8 @@ public class ChessBoardPanel extends JPanel {
     public ChessBoardPanel(ChessBoardModel model) {
         this.model = model;
         setPreferredSize(new Dimension(
-                CELL_SIZE * (ChessBoardModel.getCols() - 1) + MARGIN * 2,
-                CELL_SIZE * (ChessBoardModel.getRows() - 1) + MARGIN * 2
+                CELL_SIZE * (ChessBoardModel.getCols() - 1) + (MARGIN +370)* 2,
+                CELL_SIZE * (ChessBoardModel.getRows() - 1) + MARGIN * 3
         ));
         setBackground(new Color(220, 179, 92));
 
@@ -45,7 +50,7 @@ public class ChessBoardPanel extends JPanel {
     }
 
     private void handleMouseClick(int x, int y) {
-        int col = Math.round((float)(x - MARGIN) / CELL_SIZE);
+        int col = Math.round((float)(x - MARGIN-370) / CELL_SIZE);
         int row = Math.round((float)(y - MARGIN) / CELL_SIZE);
 
         if (!model.isValidPosition(row, col)) {
@@ -75,6 +80,10 @@ public class ChessBoardPanel extends JPanel {
         // 因此绘制GUI的过程中需要自己手动计算每个组件的位置（坐标）
         drawBoard(g2d);
         drawPieces(g2d);
+        drawImageLiu(g2d);
+        drawImageXiang(g2d,brightnessxiang);
+
+
     }
 
     /**
@@ -87,12 +96,12 @@ public class ChessBoardPanel extends JPanel {
         // 绘制横线
         for (int i = 0; i < ChessBoardModel.getRows(); i++) {
             int y = MARGIN + i * CELL_SIZE;
-            g.drawLine(MARGIN, y, MARGIN + (ChessBoardModel.getCols() - 1) * CELL_SIZE, y);
+            g.drawLine(MARGIN+370, y, MARGIN+370 + (ChessBoardModel.getCols() - 1) * CELL_SIZE, y);
         }
 
         // 绘制竖线
         for (int i = 0; i < ChessBoardModel.getCols(); i++) {
-            int x = MARGIN + i * CELL_SIZE;
+            int x = (MARGIN+370) + i * CELL_SIZE;
             if (i == 0 || i == ChessBoardModel.getCols() - 1) {
                 // 两边的竖线贯通整个棋盘
                 g.drawLine(x, MARGIN, x, MARGIN + (ChessBoardModel.getRows() - 1) * CELL_SIZE);
@@ -112,11 +121,11 @@ public class ChessBoardPanel extends JPanel {
         String chuHeText = "楚河";
         FontMetrics fm = g.getFontMetrics();
         int chuHeWidth = fm.stringWidth(chuHeText);
-        g.drawString(chuHeText, MARGIN + CELL_SIZE * 2 - chuHeWidth / 2, riverY + 8);
+        g.drawString(chuHeText, (MARGIN+370) + CELL_SIZE * 2 - chuHeWidth / 2, riverY + 8);
 
         String hanJieText = "汉界";
         int hanJieWidth = fm.stringWidth(hanJieText);
-        g.drawString(hanJieText, MARGIN + CELL_SIZE * 6 - hanJieWidth / 2, riverY + 8);
+        g.drawString(hanJieText, (MARGIN+370) + CELL_SIZE * 6 - hanJieWidth / 2, riverY + 8);
     }
 
     /**
@@ -126,7 +135,7 @@ public class ChessBoardPanel extends JPanel {
         // 遍历棋盘上的每一个棋子，每次循环绘制该棋子
         for (AbstractPiece piece : model.getPieces()) {
             // 计算每一个棋子的坐标
-            int x = MARGIN + piece.getCol() * CELL_SIZE;
+            int x = (MARGIN +370)+ piece.getCol() * CELL_SIZE;
             int y = MARGIN + piece.getRow() * CELL_SIZE;
 
             boolean isSelected = (piece == selectedPiece);
@@ -193,4 +202,55 @@ public class ChessBoardPanel extends JPanel {
         g.drawLine(centerX + cornerSize, centerY + cornerSize,
                 centerX + cornerSize, centerY + cornerSize - lineLength);
     }
+
+
+    /**
+     * 绘制刘邦
+     * @param g
+     */
+
+
+
+
+    public void drawImageLiu(Graphics2D g){
+        File file=new File("ui/Components/刘邦.jpg");
+        try {
+            BufferedImage bufferedImage= ImageIO.read(file);
+            g.drawImage(bufferedImage,0,0,368,690,null);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+
+/**
+ * 绘制项羽
+ */
+float brightnessxiang=10;
+public void drawImageXiang(Graphics2D g,float brightness){
+    File file=new File("ui/Components/项羽.jpg");
+    try {
+        BufferedImage bufferedImage= ImageIO.read(file);
+        RescaleOp op = new RescaleOp(1.0f, brightnessxiang, null);
+        g.drawImage(bufferedImage,op,964, 0);
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+}
+
+public void settbrightnessxiang(){
+
+        brightnessxiang=150;
+         repaint(964,0,368,690);
+}
+
+
+
+
+
+
+
+
 }

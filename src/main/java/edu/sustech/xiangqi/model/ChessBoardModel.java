@@ -1,5 +1,7 @@
 package edu.sustech.xiangqi.model;
 
+import edu.sustech.xiangqi.ui.ChessBoardPanel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,14 +112,10 @@ public class ChessBoardModel {
 
 
         piece.moveTo(newRow, newCol);
-
-
         /**
          * 监测下一步该哪边移动
          */
         blacksidetomove=!isBlacksidetomove();
-
-
         return true;
     }
 
