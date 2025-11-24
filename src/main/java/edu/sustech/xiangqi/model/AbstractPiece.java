@@ -47,30 +47,31 @@ public abstract class AbstractPiece {
      * @return 是否可以移动
      */
     public  boolean canMoveTo(int targetRow, int targetCol, ChessBoardModel model){
-        boolean down=false;
-        boolean up=false;
-        for (int i = getRow(); i <10 ; i++) {
-            if (model.getPieceAt(i,getCol())!=null&&i!=getRow()){
-                if (model.getPieceAt(i,getCol()).getName().equals("帅")){
-                    down=true;
-                    break;
-                }else break;
+        if((getName().equals("帅")) || (getName().equals("將"))) {
+            boolean down = false;
+            boolean up = false;
+            for (int i = getRow(); i < 10; i++) {
+                if (model.getPieceAt(i, getCol()) != null && i != getRow()) {
+                    if (model.getPieceAt(i, getCol()).getName().equals("帅")) {
+                        down = true;
+                        break;
+                    } else break;
+                }
+            }
+            for (int i = getRow(); i >= 0; i--) {
+                if (model.getPieceAt(i, getCol()) != null && i != getRow()) {
+                    if (model.getPieceAt(i, getCol()).getName().equals("將")) {
+                        up = true;
+                        break;
+                    } else break;
+                }
+            }
+
+
+            if (up && down && targetCol != getCol()) {
+                return false;
             }
         }
-        for (int i = getRow(); i >=0 ; i--) {
-            if (model.getPieceAt(i,getCol())!=null&&i!=getRow()){
-                if (model.getPieceAt(i,getCol()).getName().equals("將")){
-                    up=true;
-                    break;
-                }else break;
-            }
-        }
-
-
-        if (up && down &&targetCol!=getCol()){
-            return false;
-        }
-
         return true;
     }
 

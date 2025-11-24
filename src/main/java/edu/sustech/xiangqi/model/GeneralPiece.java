@@ -33,7 +33,7 @@ public class GeneralPiece extends AbstractPiece {
             }
             for (int i = targetRow; i >=0 ; i--) {
                 if (model.getPieceAt(i,targetCol)!=null){
-                    if (model.getPieceAt(i,targetCol).getName().equals("将")){
+                    if (model.getPieceAt(i,targetCol).getName().equals("將")){
                         return false;
                     }else break;
                 }
