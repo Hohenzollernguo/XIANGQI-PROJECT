@@ -157,7 +157,7 @@ public class ChessBoardModel {
             pieces.remove(targetPiece);
         }
             piece.moveTo(newRow,newCol);
-            if(isInCheck(piece.isRed())){
+        if(isInCheck(piece.isRed())){
                 JOptionPane.showMessageDialog(
                         null,
                         (piece.isRed()? "红方" : "黑方") + "走棋后自身被将军！请重新走棋！",
@@ -170,6 +170,19 @@ public class ChessBoardModel {
                 }
                 return false;
             }
+        if(isGeneralFacing()){
+            JOptionPane.showMessageDialog(
+                    null,
+                    "将帅不碰面,请重新走棋！",
+                    "违规提示",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            piece.moveTo(originalRow, originalCol);
+            if (isCaptured) {
+                pieces.add(targetPiece);
+            }
+            return false;
+        } //验证将帅不碰面，否则给出提示
         piece.moveTo(originalRow,originalCol);
         if(isCaptured){
             pieces.add(targetPiece);
@@ -374,6 +387,25 @@ public class ChessBoardModel {
         }
         return true;
     } //判断是否僵局
+
+    public boolean isGeneralFacing(){
+        AbstractPiece redGeneral = getGeneral(true);
+        AbstractPiece blackGeneral = getGeneral(false);
+        if(redGeneral == null || blackGeneral == null){
+            return false;
+        }
+        if(redGeneral.getCol() != blackGeneral.getCol()){
+            return false;
+        }
+        int minRow = Math.min(redGeneral.getRow(), blackGeneral.getRow());
+        int maxRow = Math.max(redGeneral.getRow(), blackGeneral.getRow());
+        for (int row = minRow + 1; row < maxRow; row++) {
+            if (getPieceAt(row, redGeneral.getCol()) != null) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 
 
