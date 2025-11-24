@@ -6,6 +6,9 @@
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" packagePrefix="edu.sustech.xiangqi" />
       <excludeFolder url="file://$MODULE_DIR$/out/production/xiangqi/edu/sustech/xiangqi/ui/Components" />
     </content>
+    <content url="file://$MODULE_DIR$/../../../../resources">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../resources" type="java-resource" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

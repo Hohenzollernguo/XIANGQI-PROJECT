@@ -13,6 +13,7 @@ import java.awt.image.RescaleOp;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ChessBoardPanel extends JPanel {
     private final ChessBoardModel model;
@@ -213,9 +214,10 @@ public class ChessBoardPanel extends JPanel {
 float brightnessliu=10;
 
     public void drawImageLiu(Graphics2D g,float brightness) {
-        File file = new File("ui/Components/刘邦.jpg");
+
         try {
-            BufferedImage bufferedImage = ImageIO.read(file);
+            InputStream inputStream=getClass().getClassLoader().getResourceAsStream("刘邦.jpg");
+            BufferedImage bufferedImage = ImageIO.read(inputStream);
             RescaleOp op = new RescaleOp(1.0f, brightness, null);
             g.drawImage(bufferedImage, op, 0, 0);
 
@@ -243,9 +245,12 @@ float brightnessliu=10;
     float brightnessxiang = -150;
 
     public void drawImageXiang(Graphics2D g, float brightness) {
-        File file = new File("ui/Components/项羽.jpg");
+
         try {
-            BufferedImage bufferedImage = ImageIO.read(file);
+            InputStream inputStream=getClass().getClassLoader().getResourceAsStream("项羽.jpg");
+
+
+            BufferedImage bufferedImage = ImageIO.read(inputStream);
             RescaleOp op = new RescaleOp(1.0f, brightness, null);
             g.drawImage(bufferedImage, op, 964, 0);
         } catch (IOException e) {
