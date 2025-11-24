@@ -2,25 +2,20 @@ package edu.sustech.xiangqi.model;
 
 import edu.sustech.xiangqi.ui.Components.SoundPlayer;
 
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-
-
 public class ChessBoardModel {
 
-
-
     boolean blacksidetomove=false;
-
-
-
-   private final PropertyChangeSupport support;
-
+    boolean firsttiemtoplay=true;
+    private final PropertyChangeSupport support;
 
     public boolean isBlacksidetomove() {
         return blacksidetomove;
@@ -30,6 +25,18 @@ public class ChessBoardModel {
     private final List<AbstractPiece> pieces;
     private static final int ROWS = 10;
     private static final int COLS = 9;
+
+    //设置游戏是否结束的判断
+    private boolean isGameOver = false;
+
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        isGameOver = gameOver;
+    }
+
 
     public ChessBoardModel() {
         pieces = new ArrayList<>();
@@ -81,8 +88,6 @@ public class ChessBoardModel {
 
     }
 
-
-
     public List<AbstractPiece> getPieces() {
         return pieces;
     }
@@ -100,19 +105,21 @@ public class ChessBoardModel {
         return row >= 0 && row < ROWS && col >= 0 && col < COLS;
     }
 
-
-
-
     public void addPropertyChangeListener(String propertyname,PropertyChangeListener listener){
         support.addPropertyChangeListener(propertyname, (PropertyChangeListener) listener);
     }
-
 
     public PropertyChangeSupport getSupport() {
         return support;
     }
 
     public boolean movePiece(AbstractPiece piece, int newRow, int newCol) {
+        //判断游戏是否结束
+        if(isGameOver){
+            JOptionPane.showMessageDialog(null, "游戏已结束，请点击「重新开始」！", "提示", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+
         if (!isValidPosition(newRow, newCol)) {
             return false;
         }
@@ -129,19 +136,67 @@ public class ChessBoardModel {
           return false;
        }
 
-       AbstractPiece targetPiece = getPieceAt(newRow, newCol);
-        if (targetPiece != null) {
+
+
+
+       //检查走完后是否会导致己方被将军，如果是则不允许移动
+        int originalRow = piece.getRow();
+        int originalCol = piece.getCol();
+        AbstractPiece targetPiece = getPieceAt(newRow,newCol);
+        boolean isCaptured = false;
+        if(targetPiece != null){
+            isCaptured = true;
+        }
+        if(isCaptured){
+
             if (targetPiece.isRed()){
                 SoundPlayer.soundplay("项羽吃子.wav");
             }else {
                 SoundPlayer.soundplay("刘邦吃子.wav");
-            }pieces.remove(targetPiece);
+            }
+            pieces.remove(targetPiece);
+        }
+            piece.moveTo(newRow,newCol);
+            if(isInCheck(piece.isRed())){
+                JOptionPane.showMessageDialog(
+                        null,
+                        (piece.isRed()? "红方" : "黑方") + "走棋后自身被将军！请重新走棋！",
+                        "违规提示",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                piece.moveTo(originalRow,originalCol);
+                if(isCaptured){
+                    pieces.add(targetPiece);
+                }
+                return false;
+            }
+        piece.moveTo(originalRow,originalCol);
+        if(isCaptured){
+            pieces.add(targetPiece);
+        }
 
+
+
+
+
+       //检验是否游戏结束
+        if (targetPiece != null) {
+            boolean isOpponentGeneral = false;
+            if((targetPiece.isRed() != piece.isRed()) && ((targetPiece.getName().equals("帅")) || (targetPiece.getName().equals("將") ))){
+                isOpponentGeneral = true;
+            }
+            pieces.remove(targetPiece);
+            if(isOpponentGeneral){
+                SwingUtilities.invokeLater(() -> {
+                    String winnerMsg = piece.isRed() ? "红方胜利！" : "黑方胜利！";
+                    JOptionPane.showMessageDialog(null, winnerMsg + "\n对方将帅已被吃掉！", "游戏结束", JOptionPane.INFORMATION_MESSAGE);
+                    setGameOver(true);
+                });
+                return true;
+            }
         }
 
         piece.moveTo(newRow, newCol);
-
-
         boolean oldValue=isBlacksidetomove();
 
         /**
@@ -151,12 +206,61 @@ public class ChessBoardModel {
 
 
         boolean opponentIsRed = !piece.isRed();
+
         if(isCheckmated(opponentIsRed)){
-            return false; //对手被将死，己方胜利，游戏应该结束（结束操作还未做）
+            SwingUtilities.invokeLater(() -> {
+                String winnerSide = piece.isRed() ? "红方" : "黑方";
+                JOptionPane.showMessageDialog(
+                        null,
+                        winnerSide + "胜利！\n对方已被将死！",
+                        "游戏结束",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+                setGameOver(true); // 标记游戏结束
+            });
+            return false; //对手被将死，己方胜利
         }else if(isStalemated(opponentIsRed)){
-            return false; //对手僵局，平局，游戏应该结束（结束操作还未做）
-        } else if (isInCheck(opponentIsRed)) {
-            //对方被将军，应该给出提示（具体还未做）
+            SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "平局！",
+                        "游戏结束",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+                setGameOver(true); // 标记游戏结束
+            });
+            return false; //对手僵局，平局，游戏应该结束
+        }
+        else if (isInCheck(opponentIsRed)) {
+            SwingUtilities.invokeLater(() -> {
+                String checkedSide = opponentIsRed ? "红方" : "黑方";
+
+                /**
+                 * 垓下
+                 */
+
+                if (!opponentIsRed&&firsttiemtoplay){
+                    SoundPlayer.soundplay("垓下.wav");
+                    firsttiemtoplay=false;
+                }
+
+                JOptionPane optionPane = new JOptionPane(
+                        checkedSide + "被将军！",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                JDialog dialog = optionPane.createDialog("将军提示");
+                dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                dialog.setVisible(true);
+
+                // 3秒后自动关闭弹窗
+                new Timer(3000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dialog.dispose();
+                    }
+                }).start();
+            });
+            //对方被将军，应该给出提示
         }
         support.firePropertyChange("blacksidetomove",oldValue,this.isBlacksidetomove());
 
@@ -170,7 +274,7 @@ public class ChessBoardModel {
                     if(piece.getName().equals("帅")){
                         return piece;
                     }
-                }else{if(piece.getName().equals("将"))
+                }else{if(piece.getName().equals("將"))
                     return piece;
                 }
             }

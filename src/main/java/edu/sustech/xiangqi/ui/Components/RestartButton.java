@@ -34,5 +34,6 @@ private static ChessBoardPanel chessBoardPanel1;
         chessBoardModel1.initializeside();
         chessBoardPanel1.initializebrightness();
         chessBoardPanel1.repaint();
+        chessBoardModel1.setGameOver(false);
     }
 }
