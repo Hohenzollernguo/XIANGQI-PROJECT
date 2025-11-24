@@ -1,5 +1,7 @@
 package edu.sustech.xiangqi.model;
 
+import edu.sustech.xiangqi.ui.Components.SoundPlayer;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -129,7 +131,12 @@ public class ChessBoardModel {
 
        AbstractPiece targetPiece = getPieceAt(newRow, newCol);
         if (targetPiece != null) {
-            pieces.remove(targetPiece);
+            if (targetPiece.isRed()){
+                SoundPlayer.soundplay("项羽吃子.wav");
+            }else {
+                SoundPlayer.soundplay("刘邦吃子.wav");
+            }pieces.remove(targetPiece);
+
         }
 
         piece.moveTo(newRow, newCol);
@@ -141,7 +148,6 @@ public class ChessBoardModel {
          * 监测下一步该哪边移动
          */
         blacksidetomove=!isBlacksidetomove();
-
 
 
         boolean opponentIsRed = !piece.isRed();
@@ -264,7 +270,6 @@ public class ChessBoardModel {
         }
         return true;
     } //判断是否僵局
-
 
 
 
