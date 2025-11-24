@@ -167,6 +167,9 @@ public class ChessBoardModel {
 
     public boolean isInCheck(boolean isRed){
         AbstractPiece general = getGeneral(isRed);
+        if(general == null){
+            return false;
+        }
         int genRow = general.getRow();
         int genCol = general.getCol();
         for(AbstractPiece opponent : pieces){
@@ -181,6 +184,10 @@ public class ChessBoardModel {
     } //判断当前是否被将军
 
     public boolean isCheckmated(boolean isRed){
+        AbstractPiece general = getGeneral(isRed);
+        if (general == null){
+            return false;
+        }
         if(!isInCheck(isRed)){
             return false;
         } //先判断是否被将军
@@ -215,6 +222,10 @@ public class ChessBoardModel {
     } //判断是否被将死
 
     public boolean isStalemated(boolean isRed){
+        AbstractPiece general = getGeneral(isRed);
+        if (general == null){
+            return false;
+        }
         if(isInCheck(isRed)){
             return false;
         }
