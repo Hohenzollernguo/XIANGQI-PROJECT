@@ -10,8 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -49,6 +47,37 @@ public class ChessBoardPanel extends JPanel {
                 handleMouseClick(e.getX(), e.getY());
             }
         });
+
+
+        model.addPropertyChangeListener("blacksidetomove", evt -> {
+            boolean blackTurn = (Boolean) evt.getNewValue();
+            if (!blackTurn) {
+                brightnessliu = 10;
+                repaint(0, 0, 368, 690);
+            } else {
+                brightnessliu = -160;
+                repaint(0, 0, 368, 690);
+            }
+
+
+            if (blackTurn) {
+                brightnessxiang = 10;
+                repaint(964, 0, 368, 690);
+            } else {
+                brightnessxiang = -150;
+                repaint(964, 0, 368, 690);
+            }
+        });
+
+
+
+
+
+
+
+
+
+
     }
 
     private void handleMouseClick(int x, int y) {
@@ -225,16 +254,6 @@ float brightnessliu=10;
             throw new RuntimeException(e);
         }
 
-        model.addPropertyChangeListener("blacksidetomove", evt -> {
-            boolean blackTurn = (Boolean) evt.getNewValue();
-            if (!blackTurn) {
-                brightnessliu = 10;
-                repaint(0, 0, 368, 690);
-            } else {
-                brightnessliu = -160;
-                repaint(0, 0, 368, 690);
-            }
-        });
     }
 
 
@@ -258,17 +277,15 @@ float brightnessliu=10;
         }
 
 
-        //实现监听
-        model.addPropertyChangeListener("blacksidetomove", evt -> {
-            boolean blackTurn = (Boolean) evt.getNewValue();
-            if (blackTurn) {
-                brightnessxiang = 10;
-                repaint(964, 0, 368, 690);
-            } else {
-                brightnessxiang = -150;
-                repaint(964, 0, 368, 690);
-            }
-        });
+    }
+
+
+    /**
+     * 初始化亮度
+     */
+    public void initializebrightness(){
+        brightnessliu=10;
+        brightnessxiang=-150;
     }
 }
 

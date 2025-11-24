@@ -74,6 +74,13 @@ public class ChessBoardModel {
         pieces.add(new CannonPiece("炮", 7, 7, true));
     }
 
+    public void initializeside(){
+        blacksidetomove=false;
+
+    }
+
+
+
     public List<AbstractPiece> getPieces() {
         return pieces;
     }
