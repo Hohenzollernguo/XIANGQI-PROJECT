@@ -1,7 +1,7 @@
 package edu.sustech.xiangqi.model;
 
-import edu.sustech.xiangqi.ui.ChessBoardPanel;
-
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +15,11 @@ public class ChessBoardModel {
 
     boolean blacksidetomove=false;
 
+
+
+   private final PropertyChangeSupport support;
+
+
     public boolean isBlacksidetomove() {
         return blacksidetomove;
     }
@@ -26,6 +31,7 @@ public class ChessBoardModel {
 
     public ChessBoardModel() {
         pieces = new ArrayList<>();
+        this.support=new PropertyChangeSupport(this);
         initializePieces();
     }
 
@@ -85,6 +91,18 @@ public class ChessBoardModel {
         return row >= 0 && row < ROWS && col >= 0 && col < COLS;
     }
 
+
+
+
+    public void addPropertyChangeListener(String propertyname,PropertyChangeListener listener){
+        support.addPropertyChangeListener(propertyname, (PropertyChangeListener) listener);
+    }
+
+
+    public PropertyChangeSupport getSupport() {
+        return support;
+    }
+
     public boolean movePiece(AbstractPiece piece, int newRow, int newCol) {
         if (!isValidPosition(newRow, newCol)) {
             return false;
@@ -112,10 +130,15 @@ public class ChessBoardModel {
 
 
         piece.moveTo(newRow, newCol);
+
+
+        boolean oldValue=isBlacksidetomove();
+
         /**
          * 监测下一步该哪边移动
          */
         blacksidetomove=!isBlacksidetomove();
+        support.firePropertyChange("blacksidetomove",oldValue,this.isBlacksidetomove());
         return true;
     }
 
