@@ -211,6 +211,7 @@ public class ChessBoardModel {
                 if(isCaptured){
                     pieces.add(targetPiece);
                 }
+                hasmove = false;
                 return false;
             }
         if(isGeneralFacing()){
@@ -224,6 +225,7 @@ public class ChessBoardModel {
             if (isCaptured) {
                 pieces.add(targetPiece);
             }
+            hasmove = false;
             return false;
         } //验证将帅不碰面，否则给出提示
         piece.moveTo(originalRow,originalCol);
