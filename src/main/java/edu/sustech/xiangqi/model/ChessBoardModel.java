@@ -133,6 +133,11 @@ public class ChessBoardModel {
 
     int originalRow;
     int originalCol;
+    boolean hasmove=false;
+
+    public boolean isHasmove() {
+        return hasmove;
+    }
 
     public int getOriginalRow() {
         return originalRow;
@@ -193,7 +198,7 @@ public class ChessBoardModel {
 
 
 
-
+            hasmove=true;
             piece.moveTo(newRow,newCol);
         if(isInCheck(piece.isRed())){
                 JOptionPane.showMessageDialog(

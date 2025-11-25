@@ -113,8 +113,9 @@ public class ChessBoardPanel extends JPanel {
         drawPieces(g2d);
         drawImageLiu(g2d,brightnessliu);
         drawImageXiang(g2d, brightnessxiang);
-        showingPreviousMove(g2d,CELL_SIZE*model.getOriginalCol()+MARGIN+370,model.getOriginalRow()*CELL_SIZE+MARGIN);
-
+        if (model.isHasmove()) {
+            showingPreviousMove(g2d, CELL_SIZE * model.getOriginalCol() + MARGIN + 370, model.getOriginalRow() * CELL_SIZE + MARGIN);
+        }
 
 
 
@@ -243,11 +244,11 @@ public class ChessBoardPanel extends JPanel {
     /**
      * 绘制移动后前一步的显示
      */
-    private void showingPreviousMove(Graphics2D g, int centerX, int centerY){
-      g.setColor(new Color(161, 246, 161));
-     g.fillRect(centerX-13,centerY-13,PIECE_RADIUS,PIECE_RADIUS);
-    }
+    private void showingPreviousMove(Graphics2D g, int centerX, int centerY) {
+        g.setColor(new Color(161, 246, 161));
+        g.fillRect(centerX - 13, centerY - 13, PIECE_RADIUS, PIECE_RADIUS);
 
+    }
 
 
 
