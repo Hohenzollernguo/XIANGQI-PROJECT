@@ -1,9 +1,11 @@
 package edu.sustech.xiangqi.model;
 
+import edu.sustech.xiangqi.ui.ChessBoardPanel;
 import edu.sustech.xiangqi.ui.Components.SoundPlayer;
 
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
@@ -12,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChessBoardModel {
+
+
 
 
 
@@ -127,6 +131,17 @@ public class ChessBoardModel {
         return support;
     }
 
+    int originalRow;
+    int originalCol;
+
+    public int getOriginalRow() {
+        return originalRow;
+    }
+
+    public int getOriginalCol() {
+        return originalCol;
+    }
+
     public boolean movePiece(AbstractPiece piece, int newRow, int newCol) {
         //判断游戏是否结束
         if(isGameOver){
@@ -154,8 +169,8 @@ public class ChessBoardModel {
 
 
        //检查走完后是否会导致己方被将军，如果是则不允许移动
-        int originalRow = piece.getRow();
-        int originalCol = piece.getCol();
+         originalRow = piece.getRow();
+         originalCol = piece.getCol();
         AbstractPiece targetPiece = getPieceAt(newRow,newCol);
         boolean isCaptured = false;
         if(targetPiece != null){
@@ -172,6 +187,13 @@ public class ChessBoardModel {
             }
             pieces.remove(targetPiece);
         }
+
+
+
+
+
+
+
             piece.moveTo(newRow,newCol);
         if(isInCheck(piece.isRed())){
                 JOptionPane.showMessageDialog(
