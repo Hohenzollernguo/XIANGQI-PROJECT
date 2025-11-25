@@ -7,11 +7,6 @@ import java.io.InputStream;
 public class SoundPlayer {
 
 
-//public void check(){
-//        if (!clip.isRunning()){
-//            clip.start();
-//        }
-//}
     public static void soundplay(String path){
         try {
             InputStream inputStream= SoundPlayer.class.getClassLoader().getResourceAsStream(path);

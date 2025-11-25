@@ -13,6 +13,13 @@ import java.util.List;
 
 public class ChessBoardModel {
 
+
+
+//construct 棋子数量
+    int redPieceNum;
+    int blackPieceNum;
+//
+
     boolean blacksidetomove=false;
     boolean firsttiemtoplay=true;
     private final PropertyChangeSupport support;
@@ -46,6 +53,13 @@ public class ChessBoardModel {
 
     public void initializePieces() {
         pieces.clear();
+
+
+        //为两方棋子计数
+        redPieceNum=16;
+        blackPieceNum=16;
+
+
         // 黑方棋子
         pieces.add(new GeneralPiece("將", 0, 4, false));
         pieces.add(new SoldierPiece("卒", 3, 0, false));
@@ -151,8 +165,10 @@ public class ChessBoardModel {
 
             if (targetPiece.isRed()){
                 SoundPlayer.soundplay("项羽吃子.wav");
+                redPieceNum--;
             }else {
                 SoundPlayer.soundplay("刘邦吃子.wav");
+                blackPieceNum--;
             }
             pieces.remove(targetPiece);
         }
@@ -252,7 +268,7 @@ public class ChessBoardModel {
                  * 垓下
                  */
 
-                if (!opponentIsRed&&firsttiemtoplay){
+                if (!opponentIsRed&&firsttiemtoplay&&redPieceNum>blackPieceNum){
                     SoundPlayer.soundplay("垓下.wav");
                     firsttiemtoplay=false;
                 }
