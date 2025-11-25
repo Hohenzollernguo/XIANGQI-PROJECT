@@ -139,6 +139,11 @@ public class ChessBoardModel {
         return hasmove;
     }
 
+
+    public void setHasmove(boolean hasmove) {
+        this.hasmove = hasmove;
+    }
+
     public int getOriginalRow() {
         return originalRow;
     }

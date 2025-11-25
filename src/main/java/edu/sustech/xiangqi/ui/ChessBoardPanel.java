@@ -252,18 +252,6 @@ public class ChessBoardPanel extends JPanel {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * 绘制刘邦
      *
@@ -312,9 +300,10 @@ float brightnessliu=10;
     /**
      * 初始化亮度
      */
-    public void initializebrightness(){
+    public void initializebrightnessandmove(){
         brightnessliu=10;
         brightnessxiang=-150;
+        model.setHasmove(false);
     }
 }
 

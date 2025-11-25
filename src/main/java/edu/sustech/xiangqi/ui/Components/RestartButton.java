@@ -30,10 +30,12 @@ private static ChessBoardPanel chessBoardPanel1;
 
 
     public static void restartAction(){
+
         chessBoardModel1.initializePieces();
         chessBoardModel1.initializeside();
-        chessBoardPanel1.initializebrightness();
+        chessBoardPanel1.initializebrightnessandmove();
         chessBoardPanel1.repaint();
         chessBoardModel1.setGameOver(false);
+
     }
 }

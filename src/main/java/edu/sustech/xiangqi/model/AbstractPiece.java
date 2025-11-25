@@ -40,10 +40,6 @@ public abstract class AbstractPiece {
     public void moveTo(int newRow, int newCol) {
         this.row = newRow;
         this.col = newCol;
-
-
-
-
     }
 
     /**
@@ -78,14 +74,4 @@ public abstract class AbstractPiece {
         }
         return true;
     }
-
-
-
-
-
-
-
-
-
-
 }

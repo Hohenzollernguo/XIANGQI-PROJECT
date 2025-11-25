@@ -26,11 +26,6 @@ public class XiangqiApplication {
              * 设置组件
              */
 
-
-
-
-
-
             RestartButton.RestartGame(frame,model,boardPanel);
 
             frame.setVisible(true);
