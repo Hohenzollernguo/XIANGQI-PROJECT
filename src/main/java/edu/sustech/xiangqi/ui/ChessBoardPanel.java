@@ -241,6 +241,14 @@ public class ChessBoardPanel extends JPanel {
     }
 
 
+
+
+
+
+
+
+
+
     /**
      * 绘制移动后前一步的显示
      */

@@ -74,4 +74,21 @@ public abstract class AbstractPiece {
         }
         return true;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
