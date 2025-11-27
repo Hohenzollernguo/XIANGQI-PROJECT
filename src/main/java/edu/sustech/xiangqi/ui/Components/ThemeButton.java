@@ -18,9 +18,19 @@ public class ThemeButton {
     public static void setTheme(JFrame jFrame, ChessBoardPanel chessBoardPanel){
         JMenuBar jMenuBar=new JMenuBar();
         JMenu theme=new JMenu("主题皮肤");
+        JMenuItem themeItemChunFen=new JMenuItem("春分");
+        JMenuItem themeItemXiazhi=new JMenuItem("夏至");
+        JMenuItem themeItemLiQiu=new JMenuItem("立秋");
         JMenuItem themeItemXiaoXue=new JMenuItem("小雪");
-        themeItemXiaoXue.addActionListener(e -> themeChange("小雪.jpeg"));
 
+        themeItemChunFen.addActionListener(e -> themeChange("春分.jpg"));
+        themeItemXiaoXue.addActionListener(e -> themeChange("小雪.jpg"));
+        themeItemLiQiu.addActionListener(e -> themeChange("立秋.jpg"));
+        themeItemXiazhi.addActionListener(e -> themeChange("夏至.jpg"));
+
+        theme.add(themeItemChunFen);
+        theme.add(themeItemXiazhi);
+        theme.add(themeItemLiQiu);
         theme.add(themeItemXiaoXue);
         jMenuBar.add(theme);
         jFrame.setJMenuBar(jMenuBar);
