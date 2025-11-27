@@ -16,7 +16,7 @@ public class ThemeButton {
 
 
     public static void setTheme(JFrame jFrame, ChessBoardPanel chessBoardPanel){
-        JMenuBar jMenuBar=new JMenuBar();
+        JMenuBar jMenuBar=jFrame.getJMenuBar();
         JMenu theme=new JMenu("主题皮肤");
         JMenuItem themeItemXiaoXue=new JMenuItem("小雪");
         themeItemXiaoXue.addActionListener(e -> themeChange("小雪.jpeg"));
@@ -45,7 +45,5 @@ static BufferedImage bufferedImage;
     }
 chessBoardPanel1.repaint();
 }
-
-
 
 }
