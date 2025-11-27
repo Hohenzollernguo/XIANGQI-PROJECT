@@ -11,8 +11,13 @@ private static ChessBoardModel chessBoardModel1;
 
 private static ChessBoardPanel chessBoardPanel1;
 
+public static void init(ChessBoardModel chessBoardModel,ChessBoardPanel chessBoardPanel){
+    chessBoardModel1 = chessBoardModel;
+    chessBoardPanel1 = chessBoardPanel;
+}
 
 
+     /*将创建菜单方法移去，仅保留负责初始化变量：方法init
     public static void RestartGame(JFrame jFrame, ChessBoardModel chessBoardModel, ChessBoardPanel chessBoardPanel) {
         JMenuBar jMenuBar = new JMenuBar();
         JMenu restartMenu=new JMenu("重新开始");
@@ -26,7 +31,7 @@ private static ChessBoardPanel chessBoardPanel1;
         chessBoardPanel1=chessBoardPanel;
         chessBoardModel1=chessBoardModel;
     }
-
+    */
 
 
     public static void restartAction(){

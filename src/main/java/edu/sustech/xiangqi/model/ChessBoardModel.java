@@ -10,10 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChessBoardModel {
+public class ChessBoardModel implements Serializable {
 
 
 
@@ -448,6 +449,43 @@ public class ChessBoardModel {
             }
         }
         return true;
+    }
+
+    /**
+     * 保存游戏进度
+     */
+    public void saveGame(String username){
+        String filePath = username + "_progress.ser";
+        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))){
+            oos.writeObject(this);
+            JOptionPane.showMessageDialog(null,"游戏保存成功");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "保存失败" + e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     *加载游戏进度
+     */
+    public void loadGame (String username){
+        String filePath = username + "_progress.ser";
+        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))){
+            ChessBoardModel loadModel = (ChessBoardModel) ois.readObject();
+            this.pieces.clear();
+            this.pieces.addAll(loadModel.pieces);
+            this.blacksidetomove = loadModel.blacksidetomove;
+            this.isGameOver = loadModel.isGameOver;
+            this.hasmove = loadModel.hasmove;
+            this.originalRow = loadModel.originalRow;
+            this.originalCol = loadModel.originalCol;
+            JOptionPane.showMessageDialog(null,"游戏加载成功");
+
+
+        } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(null,"未找到保存的游戏进度","提示",JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(null,"加载失败" + e.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 
