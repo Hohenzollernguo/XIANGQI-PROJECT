@@ -26,7 +26,6 @@ public class ChessBoardModel implements Serializable {
 //
 
     boolean blacksidetomove=false;
-    boolean firsttiemtoplay=true;
     private final PropertyChangeSupport support;
 
     public boolean isBlacksidetomove() {
@@ -104,7 +103,6 @@ public class ChessBoardModel implements Serializable {
 
     public void initializeside(){
         blacksidetomove=false;
-
     }
 
     public List<AbstractPiece> getPieces() {
@@ -153,6 +151,7 @@ public class ChessBoardModel implements Serializable {
         return originalCol;
     }
 
+
     public boolean movePiece(AbstractPiece piece, int newRow, int newCol) {
         //判断游戏是否结束
         if(isGameOver){
@@ -188,22 +187,17 @@ public class ChessBoardModel implements Serializable {
             isCaptured = true;
         }
         if(isCaptured){
-
-            if (targetPiece.isRed()){
+            if (targetPiece.isRed()&&hasmove){
                 SoundPlayer.soundplay("项羽吃子.wav");
                 redPieceNum--;
             }else {
-                SoundPlayer.soundplay("刘邦吃子.wav");
-                blackPieceNum--;
+                if (hasmove) {
+                    SoundPlayer.soundplay("刘邦吃子.wav");
+                    blackPieceNum--;
+                }
             }
             pieces.remove(targetPiece);
         }
-
-
-
-
-
-
             hasmove=true;
             piece.moveTo(newRow,newCol);
         if(isInCheck(piece.isRed())){
@@ -303,9 +297,8 @@ public class ChessBoardModel implements Serializable {
                  * 垓下
                  */
 
-                if (!opponentIsRed&&firsttiemtoplay&&redPieceNum>blackPieceNum){
+                if (!opponentIsRed&&redPieceNum-2>blackPieceNum){
                     SoundPlayer.soundplay("垓下.wav");
-                    firsttiemtoplay=false;
                 }
 
                 JOptionPane optionPane = new JOptionPane(
@@ -506,4 +499,5 @@ public class ChessBoardModel implements Serializable {
     public static int getCols() {
         return COLS;
     }
+
 }

@@ -2,6 +2,7 @@ package edu.sustech.xiangqi.ui;
 
 import edu.sustech.xiangqi.model.ChessBoardModel;
 import edu.sustech.xiangqi.model.AbstractPiece;
+import edu.sustech.xiangqi.ui.Components.ThemeButton;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -101,9 +102,28 @@ public class ChessBoardPanel extends JPanel {
         repaint();
     }
 
+    /**
+     * 主题皮肤
+     */
+   private BufferedImage bufferedImage;
+
+    public void setBufferedImage(BufferedImage bufferedImage) {
+        this.bufferedImage = bufferedImage;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+
+
+        if (bufferedImage!=null) {
+            g.drawImage(bufferedImage,370,0,596,690,this);
+        }
+
+
+
+
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -239,6 +259,14 @@ public class ChessBoardPanel extends JPanel {
         g.drawLine(centerX + cornerSize, centerY + cornerSize,
                 centerX + cornerSize, centerY + cornerSize - lineLength);
     }
+
+
+
+
+
+
+
+
 
 
     /**
