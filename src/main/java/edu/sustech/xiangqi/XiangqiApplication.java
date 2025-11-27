@@ -2,6 +2,7 @@ package edu.sustech.xiangqi;
 import edu.sustech.xiangqi.model.ChessBoardModel;
 import edu.sustech.xiangqi.ui.ChessBoardPanel;
 import edu.sustech.xiangqi.ui.Components.RestartButton;
+import edu.sustech.xiangqi.ui.Components.ThemeButton;
 
 import javax.swing.*;
 
@@ -27,7 +28,7 @@ public class XiangqiApplication {
              */
 
             RestartButton.RestartGame(frame,model,boardPanel);
-
+            ThemeButton.setTheme(frame,boardPanel);
             frame.setVisible(true);
         });
     }
