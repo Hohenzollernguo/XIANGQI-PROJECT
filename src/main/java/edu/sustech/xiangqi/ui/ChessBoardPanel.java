@@ -332,6 +332,7 @@ float brightnessliu=10;
         brightnessliu=10;
         brightnessxiang=-150;
         model.setHasmove(false);
+        repaint();
     }
 }
 

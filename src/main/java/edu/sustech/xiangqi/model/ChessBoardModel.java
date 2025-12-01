@@ -1,5 +1,6 @@
 package edu.sustech.xiangqi.model;
 
+import com.sun.scenario.effect.impl.prism.ps.PPSBlend_ADDPeer;
 import edu.sustech.xiangqi.ui.ChessBoardPanel;
 import edu.sustech.xiangqi.ui.Components.SoundPlayer;
 
@@ -39,6 +40,21 @@ public class ChessBoardModel implements Serializable {
 
     //设置游戏是否结束的判断
     private boolean isGameOver = false;
+
+    //走棋历史记录
+    private List<Move> moveHistory = new ArrayList<>();
+
+    public List<Move> getMoveHistory() {
+        return moveHistory;
+    }
+
+    public int getRedPieceNum() {
+        return redPieceNum;
+    }
+
+    public int getBlackPieceNum() {
+        return blackPieceNum;
+    }
 
     public boolean isGameOver() {
         return isGameOver;
@@ -178,7 +194,7 @@ public class ChessBoardModel implements Serializable {
 
 
 
-       //检查走完后是否会导致己方被将军，如果是则不允许移动
+
          originalRow = piece.getRow();
          originalCol = piece.getCol();
         AbstractPiece targetPiece = getPieceAt(newRow,newCol);
@@ -200,7 +216,7 @@ public class ChessBoardModel implements Serializable {
         }
             hasmove=true;
             piece.moveTo(newRow,newCol);
-        if(isInCheck(piece.isRed())){
+        /*if(isInCheck(piece.isRed())){
                 JOptionPane.showMessageDialog(
                         null,
                         (piece.isRed()? "红方" : "黑方") + "走棋后自身被将军！请重新走棋！",
@@ -213,7 +229,7 @@ public class ChessBoardModel implements Serializable {
                 }
                 hasmove = false;
                 return false;
-            }
+            }*/
         if(isGeneralFacing()){
             JOptionPane.showMessageDialog(
                     null,
@@ -232,6 +248,7 @@ public class ChessBoardModel implements Serializable {
         if(isCaptured){
             pieces.add(targetPiece);
         }
+        moveHistory.add(new Move(piece,originalRow,originalCol,newRow,newCol,targetPiece));
 
 
 
@@ -276,7 +293,7 @@ public class ChessBoardModel implements Serializable {
                 );
                 setGameOver(true); // 标记游戏结束
             });
-            return false; //对手被将死，己方胜利
+            return true; //对手被将死，己方胜利
         }else if(isStalemated(opponentIsRed)){
             SwingUtilities.invokeLater(() -> {
                 JOptionPane.showMessageDialog(
@@ -287,7 +304,7 @@ public class ChessBoardModel implements Serializable {
                 );
                 setGameOver(true); // 标记游戏结束
             });
-            return false; //对手僵局，平局，游戏应该结束
+            return true; //对手僵局，平局，游戏应该结束
         }
         else if (isInCheck(opponentIsRed)) {
             SwingUtilities.invokeLater(() -> {
@@ -359,13 +376,14 @@ public class ChessBoardModel implements Serializable {
 
     public boolean isCheckmated(boolean isRed){
         AbstractPiece general = getGeneral(isRed);
+        List<AbstractPiece> pieceCopy = new ArrayList<>(pieces);
         if (general == null){
             return false;
         }
         if(!isInCheck(isRed)){
             return false;
         } //先判断是否被将军
-        for(AbstractPiece piece : pieces){
+        for(AbstractPiece piece : pieceCopy){
             if(piece.isRed() == isRed){
                 int originalRow = piece.getRow();
                 int originalCol = piece.getCol();
@@ -396,6 +414,7 @@ public class ChessBoardModel implements Serializable {
     } //判断是否被将死
 
     public boolean isStalemated(boolean isRed){
+        List<AbstractPiece> pieceCopy = new ArrayList<>(pieces);
         AbstractPiece general = getGeneral(isRed);
         if (general == null){
             return false;
@@ -403,7 +422,7 @@ public class ChessBoardModel implements Serializable {
         if(isInCheck(isRed)){
             return false;
         }
-        for (AbstractPiece piece : pieces){
+        for (AbstractPiece piece : pieceCopy){
             if(piece.isRed() == isRed){
                 int originalRow = piece.getRow();
                 int originalCol = piece.getCol();
@@ -454,38 +473,95 @@ public class ChessBoardModel implements Serializable {
     /**
      * 保存游戏进度
      */
-    public void saveGame(String username){
-        String filePath = username + "_progress.ser";
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))){
-            oos.writeObject(this);
-            JOptionPane.showMessageDialog(null,"游戏保存成功");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "保存失败" + e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+    public boolean saveGame(String username){
+        File saveDir = new File("saves");
+        if(!saveDir.exists() && !saveDir.mkdirs()){
+            JOptionPane.showMessageDialog(null,"无法创建存档","错误",JOptionPane.ERROR_MESSAGE);
+            return false;
         }
+        File saveFile = new File(saveDir,"save_" + username + ".ser");
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(saveFile))){
+            GameState state = new GameState(this);
+            oos.writeObject(state);
+            return true;
+        } catch (IOException e){
+            JOptionPane.showMessageDialog(null,"保存失败" + e.getMessage(),"错误", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
     }
 
     /**
      *加载游戏进度
      */
-    public void loadGame (String username){
-        String filePath = username + "_progress.ser";
-        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))){
-            ChessBoardModel loadModel = (ChessBoardModel) ois.readObject();
-            this.pieces.clear();
-            this.pieces.addAll(loadModel.pieces);
-            this.blacksidetomove = loadModel.blacksidetomove;
-            this.isGameOver = loadModel.isGameOver;
-            this.hasmove = loadModel.hasmove;
-            this.originalRow = loadModel.originalRow;
-            this.originalCol = loadModel.originalCol;
-            JOptionPane.showMessageDialog(null,"游戏加载成功");
-
-
-        } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(null,"未找到保存的游戏进度","提示",JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception e){
-            JOptionPane.showMessageDialog(null,"加载失败" + e.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
+    public boolean loadGame (String username){
+        File saveFile = new File("saves","save_" + username + ".ser");
+        if(!saveFile.exists()){
+            JOptionPane.showMessageDialog(null,"无存档记录","提示",JOptionPane.INFORMATION_MESSAGE);
+            return false;
         }
+
+        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saveFile))) {
+            GameState state = (GameState) ois.readObject();
+            boolean oldBlackToMove = this.blacksidetomove;
+            pieces.clear();
+            pieces.addAll(state.getPieces());
+            this.blacksidetomove = state.isBlacakToMove();
+            this.isGameOver = state.isGameOver();
+            this.moveHistory = new ArrayList<>(state.getMoveHistory());
+            this.redPieceNum = state.getRedPieceNum();
+            this.blackPieceNum =  state.getBlackPieceNum();
+            this.hasmove =state.isHasMove();
+            this.originalCol = state.getOriginalCol();
+            this.originalRow = state.getOriginalRow();
+            support.firePropertyChange("blacksidetomove", oldBlackToMove, this.blacksidetomove);
+            support.firePropertyChange("repaint", null, null);
+            return true;
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "存档无效","错误",JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    /**
+     *悔棋，取消上一步
+     */
+
+    public  boolean undoLastMove(){
+        if(moveHistory.isEmpty()){
+            JOptionPane.showMessageDialog(null,"无历史记录","提示",JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        Move lastMove = moveHistory.remove(moveHistory.size() -1);
+        int originalRow = lastMove.getOriginalRow();
+        int originalCol = lastMove.getOriginalCol();
+        AbstractPiece movePiece = lastMove.getMovePiece();
+        AbstractPiece capturedPiece = lastMove.getCapturedPiece();
+        movePiece.moveTo(lastMove.getOriginalRow(),lastMove.getOriginalCol());
+        if(capturedPiece != null){
+            pieces.add(capturedPiece);
+            if(capturedPiece.isRed()){
+                redPieceNum++;
+            }else{
+                blackPieceNum++;
+            }
+        }
+        boolean oldValue = blacksidetomove;
+        blacksidetomove = !blacksidetomove;
+        support.firePropertyChange("blacksidetomove", oldValue, blacksidetomove);
+
+
+        if(moveHistory.isEmpty()){
+            hasmove = false;
+        }else {
+            Move preMove = moveHistory.get(moveHistory.size() - 1);
+            this.originalRow = preMove.getOriginalRow();
+            this.originalCol = preMove.getOriginalCol();
+            hasmove =true;
+        }
+        isGameOver = false;
+        return true;
     }
 
 

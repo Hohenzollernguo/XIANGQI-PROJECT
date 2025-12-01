@@ -7,8 +7,8 @@ import edu.sustech.xiangqi.ui.LoginFrame;
 import edu.sustech.xiangqi.user.User;
 
 import javax.swing.*;
-
-
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 
 public class XiangqiApplication {
@@ -67,6 +67,20 @@ public class XiangqiApplication {
             loadItem.setEnabled(!currentUser.isGuest());
             loadItem.addActionListener(e -> model.loadGame(currentUser.getUsername()));
             gameMenu.add(loadItem);
+
+            JMenuItem undoItem = new JMenuItem("悔棋");
+            undoItem.setEnabled(!currentUser.isGuest());
+            undoItem.addActionListener(e -> model.undoLastMove());
+            gameMenu.add(undoItem);
+
+            frame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                   if(!currentUser.isGuest()){
+                       model.saveGame(currentUser.getUsername());
+                   }
+                }
+            });
 
             menuBar.add(gameMenu);
             frame.setJMenuBar(menuBar);
