@@ -2,8 +2,6 @@ package edu.sustech.xiangqi.ui;
 
 import edu.sustech.xiangqi.model.ChessBoardModel;
 import edu.sustech.xiangqi.model.AbstractPiece;
-import edu.sustech.xiangqi.ui.Components.RestartButton;
-import edu.sustech.xiangqi.ui.Components.ThemeButton;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

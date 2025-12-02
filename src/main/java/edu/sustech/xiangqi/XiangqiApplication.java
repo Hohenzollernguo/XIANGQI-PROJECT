@@ -3,6 +3,7 @@ import edu.sustech.xiangqi.model.ChessBoardModel;
 import edu.sustech.xiangqi.ui.ChessBoardPanel;
 import edu.sustech.xiangqi.ui.Components.RestartButton;
 import edu.sustech.xiangqi.ui.Components.ThemeButton;
+import edu.sustech.xiangqi.ui.Components.YieldButton;
 import edu.sustech.xiangqi.ui.LoginFrame;
 import edu.sustech.xiangqi.user.User;
 
@@ -72,6 +73,11 @@ public class XiangqiApplication {
             undoItem.setEnabled(!currentUser.isGuest());
             undoItem.addActionListener(e -> model.undoLastMove());
             gameMenu.add(undoItem);
+
+            JMenuItem yieldItem=new JMenuItem("投降");
+            yieldItem.addActionListener(e -> YieldButton.yield(model));
+            gameMenu.add(yieldItem);
+
 
             frame.addWindowListener(new WindowAdapter() {
                 @Override
