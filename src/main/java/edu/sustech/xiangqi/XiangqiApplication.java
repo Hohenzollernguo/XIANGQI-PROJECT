@@ -71,7 +71,8 @@ public class XiangqiApplication {
 
             JMenuItem undoItem = new JMenuItem("悔棋");
             undoItem.setEnabled(!currentUser.isGuest());
-            undoItem.addActionListener(e -> model.undoLastMove());
+            undoItem.addActionListener(e -> {model.undoLastMove();
+            boardPanel.repaint();});
             gameMenu.add(undoItem);
 
             JMenuItem yieldItem=new JMenuItem("投降");

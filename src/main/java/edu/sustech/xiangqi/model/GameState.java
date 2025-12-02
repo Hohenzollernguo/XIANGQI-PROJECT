@@ -6,7 +6,7 @@ import java.util.List;
 
 public class GameState implements Serializable {
     private List<AbstractPiece> pieces;
-    private boolean isBlacakToMove;
+    private boolean isBlackToMove;
     private boolean isGameOver;
     private int redPieceNum;
     private int blackPieceNum;
@@ -17,7 +17,7 @@ public class GameState implements Serializable {
 
     public GameState(ChessBoardModel model){
         this.pieces = new ArrayList<>(model.getPieces());
-        this.isBlacakToMove = model.blacksidetomove;
+        this.isBlackToMove = model.blacksidetomove;
         this.isGameOver = model.isGameOver();
         this.redPieceNum = model.getRedPieceNum();
         this.blackPieceNum = model.getBlackPieceNum();
@@ -32,12 +32,12 @@ public class GameState implements Serializable {
         this.pieces = pieces;
     }
 
-    public boolean isBlacakToMove() {
-        return isBlacakToMove;
+    public boolean isBlackToMove() {
+        return isBlackToMove;
     }
 
-    public void setBlacakToMove(boolean blacakToMove) {
-        isBlacakToMove = blacakToMove;
+    public void setBlackToMove(boolean blackToMove) {
+        isBlackToMove = blackToMove;
     }
 
     public boolean isGameOver() {

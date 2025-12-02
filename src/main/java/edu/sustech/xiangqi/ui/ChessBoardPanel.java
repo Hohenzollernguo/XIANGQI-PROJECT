@@ -2,6 +2,7 @@ package edu.sustech.xiangqi.ui;
 
 import edu.sustech.xiangqi.model.ChessBoardModel;
 import edu.sustech.xiangqi.model.AbstractPiece;
+import edu.sustech.xiangqi.model.Move;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,9 +13,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 public class ChessBoardPanel extends JPanel {
     private final ChessBoardModel model;
+
 
     /**
      * 单个棋盘格子的尺寸（px）
@@ -32,6 +35,14 @@ public class ChessBoardPanel extends JPanel {
     private static final int PIECE_RADIUS = 25;
 
     private AbstractPiece selectedPiece = null;
+
+    public void setPrecurrentRow(int precurrentRow) {
+        this.precurrentRow = precurrentRow;
+    }
+
+    public void setPrecurrentCol(int precurrentCol) {
+        this.precurrentCol = precurrentCol;
+    }
 
     public ChessBoardPanel(ChessBoardModel model) {
         this.model = model;
@@ -67,6 +78,21 @@ public class ChessBoardPanel extends JPanel {
                 brightnessxiang = -150;
                 repaint(964, 0, 368, 690);
             }
+        });
+
+        model.addPropertyChangeListener("undo", evt -> {
+            List <Move> history = model.getMoveHistory();
+            if(!history.isEmpty()){
+                Move lastValidMove = history.get(history.size() - 1);
+            precurrentRow = lastValidMove.getTargetRow();
+            precurrentCol = lastValidMove.getTargetCol();
+            }else{
+                precurrentRow = -1;
+                precurrentCol = -1;
+                model.setHasmove(false);
+            }
+            selectedPiece = null;
+            repaint();
         });
 
 
@@ -281,6 +307,8 @@ public class ChessBoardPanel extends JPanel {
      * 绘制移动后前一步的显示
      */
     private void showingPreviousMove(Graphics2D g, int centerX, int centerY,int newCentralX, int newCentralY) {
+
+
         g.setColor(new Color(92, 6, 241));
         g.setStroke(new BasicStroke(3));
         g.drawArc(centerX - 26, centerY - 26, 2 * PIECE_RADIUS, 2 * PIECE_RADIUS, 30, 60);

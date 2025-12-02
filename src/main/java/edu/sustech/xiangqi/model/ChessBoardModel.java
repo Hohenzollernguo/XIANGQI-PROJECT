@@ -5,7 +5,6 @@ import edu.sustech.xiangqi.ui.Components.SoundPlayer;
 
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
@@ -61,6 +60,8 @@ public class ChessBoardModel implements Serializable {
     public void setGameOver(boolean gameOver) {
         isGameOver = gameOver;
     }
+
+
 
 
     public ChessBoardModel() {
@@ -246,7 +247,7 @@ public class ChessBoardModel implements Serializable {
         if(isCaptured){
             pieces.add(targetPiece);
         }
-        moveHistory.add(new Move(piece,originalRow,originalCol,newRow,newCol,targetPiece));
+
 
 
 
@@ -270,6 +271,7 @@ public class ChessBoardModel implements Serializable {
         }
 
         piece.moveTo(newRow, newCol);
+        moveHistory.add(new Move(piece,originalRow,originalCol,newRow,newCol,targetPiece));
         hasmove=true;
         boolean oldValue=isBlacksidetomove();
 
@@ -505,7 +507,7 @@ public class ChessBoardModel implements Serializable {
             boolean oldBlackToMove = this.blacksidetomove;
             pieces.clear();
             pieces.addAll(state.getPieces());
-            this.blacksidetomove = state.isBlacakToMove();
+            this.blacksidetomove = state.isBlackToMove();
             this.isGameOver = state.isGameOver();
             this.moveHistory = new ArrayList<>(state.getMoveHistory());
             this.redPieceNum = state.getRedPieceNum();
@@ -538,6 +540,7 @@ public class ChessBoardModel implements Serializable {
         AbstractPiece movePiece = lastMove.getMovePiece();
         AbstractPiece capturedPiece = lastMove.getCapturedPiece();
         movePiece.moveTo(lastMove.getOriginalRow(),lastMove.getOriginalCol());
+
         if(capturedPiece != null){
             pieces.add(capturedPiece);
             if(capturedPiece.isRed()){
@@ -546,10 +549,21 @@ public class ChessBoardModel implements Serializable {
                 blackPieceNum++;
             }
         }
+        if(isGeneralFacing()){
+            SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "将帅不能碰面",
+                        "警告",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            });
+            return false;
+        }
         boolean oldValue = blacksidetomove;
         blacksidetomove = !blacksidetomove;
         support.firePropertyChange("blacksidetomove", oldValue, blacksidetomove);
-
+        support.firePropertyChange("undo", null, null);
 
         if(moveHistory.isEmpty()){
             hasmove = false;
