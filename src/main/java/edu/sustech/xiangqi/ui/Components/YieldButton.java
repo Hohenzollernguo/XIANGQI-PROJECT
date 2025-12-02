@@ -18,7 +18,7 @@ public class YieldButton {
         chessBoardModel.setGameOver(true);
         JOptionPane.showMessageDialog(
                 null,
-                winnerSide + "胜利！\n对方已投降！",
+                winnerSide + "胜利！\n你已投降！",
                 "游戏结束",
                 JOptionPane.INFORMATION_MESSAGE
         );
