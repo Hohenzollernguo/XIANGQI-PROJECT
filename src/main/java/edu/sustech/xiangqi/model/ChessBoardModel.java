@@ -1,7 +1,6 @@
 package edu.sustech.xiangqi.model;
 
-import com.sun.scenario.effect.impl.prism.ps.PPSBlend_ADDPeer;
-import edu.sustech.xiangqi.ui.ChessBoardPanel;
+//import com.sun.scenario.effect.impl.prism.ps.PPSBlend_ADDPeer;
 import edu.sustech.xiangqi.ui.Components.SoundPlayer;
 
 
@@ -20,8 +19,7 @@ public class ChessBoardModel implements Serializable {
 
 
 
-
-//construct 棋子数量
+    //construct 棋子数量
     int redPieceNum;
     int blackPieceNum;
 //
@@ -214,8 +212,8 @@ public class ChessBoardModel implements Serializable {
             }
             pieces.remove(targetPiece);
         }
-            hasmove=true;
-            piece.moveTo(newRow,newCol);
+            //hasmove=true;
+           // piece.moveTo(newRow,newCol);
         /*if(isInCheck(piece.isRed())){
                 JOptionPane.showMessageDialog(
                         null,
@@ -272,6 +270,7 @@ public class ChessBoardModel implements Serializable {
         }
 
         piece.moveTo(newRow, newCol);
+        hasmove=true;
         boolean oldValue=isBlacksidetomove();
 
         /**

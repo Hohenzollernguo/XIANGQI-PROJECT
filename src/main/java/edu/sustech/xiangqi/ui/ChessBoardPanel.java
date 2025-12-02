@@ -2,6 +2,7 @@ package edu.sustech.xiangqi.ui;
 
 import edu.sustech.xiangqi.model.ChessBoardModel;
 import edu.sustech.xiangqi.model.AbstractPiece;
+import edu.sustech.xiangqi.ui.Components.RestartButton;
 import edu.sustech.xiangqi.ui.Components.ThemeButton;
 
 import javax.imageio.ImageIO;
@@ -38,7 +39,7 @@ public class ChessBoardPanel extends JPanel {
         this.model = model;
         setPreferredSize(new Dimension(
                 CELL_SIZE * (ChessBoardModel.getCols() - 1) + (MARGIN + 370) * 2,
-                CELL_SIZE * (ChessBoardModel.getRows() - 1) + MARGIN * 3
+                CELL_SIZE * (ChessBoardModel.getRows() - 1) + MARGIN * 3-10
         ));
         setBackground(new Color(220, 179, 92));
 
@@ -56,7 +57,7 @@ public class ChessBoardPanel extends JPanel {
                 brightnessliu = 10;
                 repaint(0, 0, 368, 690);
             } else {
-                brightnessliu = -160;
+                brightnessliu = -170;
                 repaint(0, 0, 368, 690);
             }
 
@@ -81,18 +82,27 @@ public class ChessBoardPanel extends JPanel {
 
     }
 
-    private void handleMouseClick(int x, int y) {
-        int col = Math.round((float) (x - MARGIN - 370) / CELL_SIZE);
-        int row = Math.round((float) (y - MARGIN) / CELL_SIZE);
+    int precurrentRow;
+    int precurrentCol;
 
-        if (!model.isValidPosition(row, col)) {
+
+
+    private void handleMouseClick(int x, int y) {
+        int currentCol = Math.round((float) (x - MARGIN - 370) / CELL_SIZE);
+        int currentRow = Math.round((float) (y - MARGIN) / CELL_SIZE);
+
+        if (!model.isValidPosition(currentRow, currentCol)) {
             return;
         }
 
         if (selectedPiece == null) {
-            selectedPiece = model.getPieceAt(row, col);
+            selectedPiece = model.getPieceAt(currentRow, currentCol);
         } else {
-            model.movePiece(selectedPiece, row, col);
+           boolean changePosition= model.movePiece(selectedPiece, currentRow, currentCol);
+            if (changePosition) {
+                precurrentCol = currentCol;
+                precurrentRow = currentRow;
+            }
             selectedPiece = null;
         }
 
@@ -118,7 +128,7 @@ public class ChessBoardPanel extends JPanel {
 
 
         if (bufferedImage!=null) {
-            g.drawImage(bufferedImage,370,0,596,690,this);
+            g.drawImage(bufferedImage,368,0,596,690,this);
         }
 
 
@@ -134,7 +144,7 @@ public class ChessBoardPanel extends JPanel {
         drawImageLiu(g2d,brightnessliu);
         drawImageXiang(g2d, brightnessxiang);
         if (model.isHasmove()) {
-            showingPreviousMove(g2d, CELL_SIZE * model.getOriginalCol() + MARGIN + 370, model.getOriginalRow() * CELL_SIZE + MARGIN);
+            showingPreviousMove(g2d, CELL_SIZE * model.getOriginalCol() + MARGIN + 370, model.getOriginalRow() * CELL_SIZE + MARGIN,precurrentCol*CELL_SIZE+MARGIN+370,precurrentRow*CELL_SIZE+MARGIN);
         }
 
 
@@ -272,12 +282,22 @@ public class ChessBoardPanel extends JPanel {
     /**
      * 绘制移动后前一步的显示
      */
-    private void showingPreviousMove(Graphics2D g, int centerX, int centerY) {
-        g.setColor(new Color(161, 246, 161));
-        g.fillRect(centerX - 13, centerY - 13, PIECE_RADIUS, PIECE_RADIUS);
+    private void showingPreviousMove(Graphics2D g, int centerX, int centerY,int newCentralX, int newCentralY) {
+        g.setColor(new Color(92, 6, 241));
+        g.setStroke(new BasicStroke(3));
+        g.drawArc(centerX - 26, centerY - 26, 2 * PIECE_RADIUS, 2 * PIECE_RADIUS, 30, 60);
+        g.drawArc(centerX - 26, centerY - 26, 2 * PIECE_RADIUS, 2 * PIECE_RADIUS, 120, 60);
+        g.drawArc(centerX - 26, centerY - 26, 2 * PIECE_RADIUS, 2 * PIECE_RADIUS, 210, 60);
+        g.drawArc(centerX - 26, centerY - 26, 2 * PIECE_RADIUS, 2 * PIECE_RADIUS, 300, 60);
 
+
+              g.setColor(new Color(17, 239, 213));
+              g.setStroke(new BasicStroke(8));
+              g.drawArc(newCentralX - 22, newCentralY - 22, 2 * PIECE_RADIUS - 5, 2 * PIECE_RADIUS - 5, 0, 360);
+
+
+       // model.setHasmove(false);
     }
-
 
 
     /**
