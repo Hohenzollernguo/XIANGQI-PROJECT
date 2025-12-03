@@ -81,7 +81,7 @@ public class SoundPlayer {
 
 
 public static void StopPlaying(){
-        if (clip2.isRunning()){
+        if (clip2 != null && clip2.isRunning()){
             clip2.close();
         }
 }

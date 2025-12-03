@@ -41,6 +41,7 @@ public static void init(ChessBoardModel chessBoardModel,ChessBoardPanel chessBoa
         chessBoardPanel1.initializebrightnessandmove();
         chessBoardPanel1.repaint();
         chessBoardModel1.setGameOver(false);
+        chessBoardModel1.getMoveHistory().clear();
 
     }
 }
