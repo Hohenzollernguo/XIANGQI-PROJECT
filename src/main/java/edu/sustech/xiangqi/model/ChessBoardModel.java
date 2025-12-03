@@ -170,6 +170,7 @@ public class ChessBoardModel implements Serializable {
     public boolean movePiece(AbstractPiece piece, int newRow, int newCol) {
         //判断游戏是否结束
         if(isGameOver){
+
             JOptionPane.showMessageDialog(null, "游戏已结束，请点击「重新开始」！", "提示", JOptionPane.INFORMATION_MESSAGE);
             return false;
         }

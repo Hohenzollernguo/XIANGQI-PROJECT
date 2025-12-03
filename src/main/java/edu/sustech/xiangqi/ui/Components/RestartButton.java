@@ -35,7 +35,7 @@ public static void init(ChessBoardModel chessBoardModel,ChessBoardPanel chessBoa
 
 
     public static void restartAction(){
-
+        SoundPlayer.StopPlaying();
         chessBoardModel1.initializePieces();
         chessBoardModel1.initializeside();
         chessBoardPanel1.initializebrightnessandmove();

@@ -9,6 +9,9 @@ public class SoundPlayer {
 
     private static volatile boolean isPlaying=false;
 
+    private static Clip clip1;
+    private static Clip clip2;
+
     public static void soundplay(String path) {
 
         if (isPlaying&&path.equals("垓下.wav")){
@@ -22,19 +25,44 @@ public class SoundPlayer {
                 AudioFormat format = audioStream.getFormat();
                 DataLine.Info info = new DataLine.Info(Clip.class, format);
 
+                if (path.equals("垓下.wav")){
+                    clip2 = (Clip) AudioSystem.getLine(info);
+                    clip2.open(audioStream);
 
-                Clip clip = (Clip) AudioSystem.getLine(info);
-                clip.open(audioStream);
+                    isPlaying=true;
 
-               if (path.equals("垓下.wav")){
-                   isPlaying=true;
-               }
-                clip.start();
+                    clip2.start();
+                    clip2.addLineListener(event -> {
 
-                clip.addLineListener(event -> {
+                        if (event.getType() == LineEvent.Type.STOP) {
+                            clip2.close();
+                            try {
+                                audioStream.close();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            try {
+                                inputStream.close();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            if (path.equals("垓下.wav")){
+                                isPlaying=false;
+                            }
+                        }
+                    });
+                }else {
+
+                clip1 = (Clip) AudioSystem.getLine(info);
+                clip1.open(audioStream);
+
+
+                clip1.start();
+
+                clip1.addLineListener(event -> {
 
                     if (event.getType() == LineEvent.Type.STOP) {
-                        clip.close();
+                        clip1.close();
                         try {
                             audioStream.close();
                         } catch (IOException e) {
@@ -45,14 +73,18 @@ public class SoundPlayer {
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-                       if (path.equals("垓下.wav")){
-                           isPlaying=false;
-                       }
                     }
-                });
+                });}
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
 
     }
+
+
+public static void StopPlaying(){
+        if (clip2.isRunning()){
+            clip2.close();
+        }
+}
 }
