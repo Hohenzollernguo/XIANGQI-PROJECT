@@ -46,9 +46,7 @@ public class SoundPlayer {
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
-                            if (path.equals("垓下.wav")){
                                 isPlaying=false;
-                            }
                         }
                     });
                 }else {
