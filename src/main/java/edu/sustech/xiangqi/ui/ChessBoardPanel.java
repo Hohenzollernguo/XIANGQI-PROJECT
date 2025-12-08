@@ -121,13 +121,19 @@ public class ChessBoardPanel extends JPanel {
 
         if (selectedPiece == null) {
             selectedPiece = model.getPieceAt(currentRow, currentCol);
-        } else {
+            model.getLegalPoints().clear();
+            if(selectedPiece != null){
+                model.caculateLegalPoints(selectedPiece);
+            }
+        }
+         else {
            boolean changePosition= model.movePiece(selectedPiece, currentRow, currentCol);
             if (changePosition) {
                 precurrentCol = currentCol;
                 precurrentRow = currentRow;
             }
             selectedPiece = null;
+            model.getLegalPoints().clear();
         }
 
         // 处理完点击事件后，需要重新绘制ui界面才能让界面上的棋子“移动”起来
@@ -161,10 +167,12 @@ public class ChessBoardPanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+
         // Demo的GUI都是由Swing中基本的组件组成的，比如背景的格子是用许多个line组合起来实现的，棋子是先绘制一个circle再在上面绘制一个text实现的
         // 因此绘制GUI的过程中需要自己手动计算每个组件的位置（坐标）
         drawBoard(g2d);
         drawPieces(g2d);
+        drawLegalMovePoints(g);
         drawImageLiu(g2d,brightnessliu);
         drawImageXiang(g2d, brightnessxiang);
         if (model.isHasmove()) {
@@ -379,6 +387,25 @@ float brightnessliu=10;
         brightnessxiang=-150;
         model.setHasmove(false);
         repaint();
+    }
+
+    /**
+     *绘制合法高亮位置
+     */
+    private void drawLegalMovePoints(Graphics g){
+        if(model.getLegalPoints().isEmpty() || selectedPiece == null){
+            return;
+        }
+        Graphics2D g2d =(Graphics2D) g;
+        g2d.setColor(new Color(0,255,0,100));
+        for(Point point : model.getLegalPoints()){
+            int x = (MARGIN + 370) + point.y * CELL_SIZE;
+            int y = MARGIN + point.x * CELL_SIZE;
+
+            g2d.fillOval(x - PIECE_RADIUS/2, y - PIECE_RADIUS/2, PIECE_RADIUS, PIECE_RADIUS);
+
+            g2d.drawOval(x - PIECE_RADIUS/2, y - PIECE_RADIUS/2, PIECE_RADIUS, PIECE_RADIUS);
+        }
     }
 }
 

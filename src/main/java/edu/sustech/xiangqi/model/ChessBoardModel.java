@@ -1,10 +1,12 @@
 package edu.sustech.xiangqi.model;
 
 //import com.sun.scenario.effect.impl.prism.ps.PPSBlend_ADDPeer;
+import edu.sustech.xiangqi.ui.ChessBoardPanel;
 import edu.sustech.xiangqi.ui.Components.SoundPlayer;
 
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
@@ -15,8 +17,8 @@ import java.util.List;
 
 public class ChessBoardModel implements Serializable {
 
-
-
+    //存储合法移动的位置
+    private List<Point> legalPoints = new ArrayList<>();
 
     //construct 棋子数量
     int redPieceNum;
@@ -577,7 +579,20 @@ public class ChessBoardModel implements Serializable {
         isGameOver = false;
         return true;
     }
-
+    //计算获得合法位移
+    public List<Point> caculateLegalPoints (AbstractPiece piece){
+        List<Point> points = new ArrayList<>();
+        legalPoints.clear();
+        piece.getName();
+        for (int i = 0; i < ChessBoardModel.ROWS; i++) {
+            for (int i1 = 0; i1 < ChessBoardModel.COLS; i1++) {
+                if(piece.canMoveTo(i,i1,this)){
+                   legalPoints.add(new Point(i,i1));
+                }
+            }
+        }
+        return points;
+    }
 
 
 
@@ -590,4 +605,11 @@ public class ChessBoardModel implements Serializable {
         return COLS;
     }
 
+    public List<Point> getLegalPoints() {
+        return legalPoints;
+    }
+
+    public void setLegalPoints(List<Point> legalPoints) {
+        this.legalPoints = legalPoints;
+    }
 }

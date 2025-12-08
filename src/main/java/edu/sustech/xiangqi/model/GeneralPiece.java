@@ -19,7 +19,7 @@ public class GeneralPiece extends AbstractPiece {
         int rowDiff = Math.abs(targetRow - currentRow);
         int colDiff = Math.abs(targetCol - currentCol);
         //王的移动规则：九宫内走一格直线；不得对面见将
-        if((rowDiff!=1&&colDiff!=1)||(rowDiff==1&&colDiff==1)){
+        if(!((rowDiff == 1 && colDiff == 0)||(rowDiff== 0 && colDiff == 1))){
             return false;
         }
         if (isRed()){
