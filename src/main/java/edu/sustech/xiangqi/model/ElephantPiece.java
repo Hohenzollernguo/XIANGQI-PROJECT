@@ -42,12 +42,11 @@ public class ElephantPiece extends AbstractPiece {
             return false;
         }
         if (model.getPieceAt(targetRow,targetCol)!=null){
-            if (model.getPieceAt(targetRow,targetCol).isRed()&&isRed()){
+            if (model.getPieceAt(targetRow,targetCol).isRed() == isRed()){
                 return false;
-            } else if (!model.getPieceAt(targetRow,targetCol).isRed()&&!isRed()) {
-                
             }
         }
+
 
        return true;
     }

@@ -216,22 +216,8 @@ public class ChessBoardModel implements Serializable {
             }
             pieces.remove(targetPiece);
         }
-            //hasmove=true;
-           // piece.moveTo(newRow,newCol);
-        /*if(isInCheck(piece.isRed())){
-                JOptionPane.showMessageDialog(
-                        null,
-                        (piece.isRed()? "红方" : "黑方") + "走棋后自身被将军！请重新走棋！",
-                        "违规提示",
-                        JOptionPane.ERROR_MESSAGE
-                );
-                piece.moveTo(originalRow,originalCol);
-                if(isCaptured){
-                    pieces.add(targetPiece);
-                }
-                hasmove = false;
-                return false;
-            }*/
+
+
         if(isGeneralFacing(piece,originalRow,originalCol,newRow,newCol)){
             JOptionPane.showMessageDialog(
                     null,
@@ -274,9 +260,25 @@ public class ChessBoardModel implements Serializable {
         }
 
         piece.moveTo(newRow, newCol);
+        if(isInCheck(piece.isRed())){
+            JOptionPane.showMessageDialog(
+                    null,
+                    (piece.isRed()? "红方" : "黑方") + "走棋后自身被将军！请重新走棋！",
+                    "违规提示",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            piece.moveTo(originalRow,originalCol);
+            if(isCaptured){
+                pieces.add(targetPiece);
+            }
+            hasmove = false;
+            return false;
+        }
         moveHistory.add(new Move(piece,originalRow,originalCol,newRow,newCol,targetPiece));
         hasmove=true;
         boolean oldValue=isBlacksidetomove();
+
+
 
         /**
          * 监测下一步该哪边移动

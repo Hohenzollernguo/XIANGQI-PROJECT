@@ -74,6 +74,7 @@ public abstract class AbstractPiece implements Serializable {
                 return false;
             }
         }
+
         return true;
     }
 
