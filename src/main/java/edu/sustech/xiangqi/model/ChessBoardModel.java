@@ -232,7 +232,7 @@ public class ChessBoardModel implements Serializable {
                 hasmove = false;
                 return false;
             }*/
-        if(isGeneralFacing()){
+        if(isGeneralFacing(piece,originalRow,originalCol,newRow,newCol)){
             JOptionPane.showMessageDialog(
                     null,
                     "将帅不碰面,请重新走棋！",
@@ -455,22 +455,28 @@ public class ChessBoardModel implements Serializable {
         return true;
     } //判断是否僵局
 
-    public boolean isGeneralFacing(){
+    public boolean isGeneralFacing(AbstractPiece piece, int originalRow,int originalCol,int newRow, int newCol){
+        piece.moveTo(newRow,newCol);
+
         AbstractPiece redGeneral = getGeneral(true);
         AbstractPiece blackGeneral = getGeneral(false);
         if(redGeneral == null || blackGeneral == null){
+            piece.moveTo(originalRow,originalCol);
             return false;
         }
         if(redGeneral.getCol() != blackGeneral.getCol()){
+            piece.moveTo(originalRow,originalCol);
             return false;
         }
         int minRow = Math.min(redGeneral.getRow(), blackGeneral.getRow());
         int maxRow = Math.max(redGeneral.getRow(), blackGeneral.getRow());
         for (int row = minRow + 1; row < maxRow; row++) {
             if (getPieceAt(row, redGeneral.getCol()) != null) {
+                piece.moveTo(originalRow,originalCol);
                 return false;
             }
         }
+        piece.moveTo(originalRow,originalCol);
         return true;
     }
 
@@ -552,17 +558,7 @@ public class ChessBoardModel implements Serializable {
                 blackPieceNum++;
             }
         }
-        if(isGeneralFacing()){
-            SwingUtilities.invokeLater(() -> {
-                JOptionPane.showMessageDialog(
-                        null,
-                        "将帅不能碰面",
-                        "警告",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
-            });
-            return false;
-        }
+
         boolean oldValue = blacksidetomove;
         blacksidetomove = !blacksidetomove;
         support.firePropertyChange("blacksidetomove", oldValue, blacksidetomove);
