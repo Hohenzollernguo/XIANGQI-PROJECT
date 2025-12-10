@@ -36,6 +36,7 @@ public class SoundPlayer {
 
                         if (event.getType() == LineEvent.Type.STOP) {
                             clip2.close();
+                            clip2=null;
                             try {
                                 audioStream.close();
                             } catch (IOException e) {
@@ -83,6 +84,7 @@ public class SoundPlayer {
 public static void StopPlaying(){
         if (clip2 != null && clip2.isRunning()){
             clip2.close();
+           clip2=null;
         }
 }
 }
